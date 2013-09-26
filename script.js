@@ -713,34 +713,34 @@ var sliderArgs = {
 
         function a() {
             numTweets = (numTweets > 4) ? 4 : numTweets;
-            f.ajax({
-                    url: "https://api.twitter.com/1/statuses/user_timeline.json?screen_name=" + twitterUsername + "&count=" + numTweets + "&callback=?&include_rts=true&exclude_replies=true",
-                    dataType: "jsonp",
-                    success: function (p) {
-                        f("#twitter .loading-text").replaceWith('<ul class="tweets" />');
-                        var q = p;
-                        var n = f(".tweets");
-                        if (showTwitterProfile) {
-                            var l = p[0]["user"];
-                            var m = l.description;
-                            var o = '<div class="profile"><h3><a href="http://www.twitter.com/' + twitterUsername + '">@' + twitterUsername + '</a><br/> <span class="name">' + l.name + "</span></h3>";
-                            o += (m) ? '<p class="bio">' + m + "</p></div>" : ""
-                        }
-                        f("#twitter .tweets").before(o);
-                        f.each(q, function () {
-                                var t = this.id_str;
-                                var s = linkifyTweet(this.text);
-                                var w = relative_time(this.created_at);
-                                var v = this.user.profile_image_url;
-                                var u = "http://twitter.com/" + twitterUsername + "/status/" + t;
-                                var r = '<li><p class="tweet">' + s + ' <span class="tweet-meta"><a class="timestamp" href="' + u + '" time="' + this.created_at + '" target="_blank">' + w + '</a> • <a class="reply" href="https://twitter.com/intent/tweet?in_reply_to=' + t + '">Reply</a></span></p></li>';
-                                n.append(r)
-                            })
-                    },
-                    error: function () {
-                        f("#twitter .loading-text").html('Error fetching tweets for username: <a href="http://www.twitter.com/' + twitterUsername + '">@' + twitterUsername + "</a>")
-                    }
-                })
+            f("#twitter .loading-text").replaceWith('<ul class="tweets" />');
+            var p = [];
+            var tweets = window.tweet_data;
+            if (tweets == null)
+            	return;
+            for (var curTweet = 0; p.length < numTweets && curTweet < tweets.length; curTweet++) {
+            	var tweet = tweets[curTweet];
+            	if (tweet.text.length > 0 && tweet.text.charAt(0) === '@')
+            		continue;
+            	p.push(tweet);
+            }
+            var n = f(".tweets");
+            if (showTwitterProfile) {
+                var l = p[0]["user"];
+                var m = l.description;
+                var o = '<div class="profile"><h3><a href="http://www.twitter.com/' + twitterUsername + '">@' + twitterUsername + '</a><br/> <span class="name">' + l.name + "</span></h3>";
+                o += (m) ? '<p class="bio">' + m + "</p></div>" : ""
+            }
+            f("#twitter .tweets").before(o);
+            f.each(p, function () {
+                    var s = this.id_str;
+                    var r = linkifyTweet(this.text);
+                    var v = relative_time(this.created_at);
+                    var u = this.user.profile_image_url;
+                    var t = "http://twitter.com/" + twitterUsername + "/status/" + s;
+                    var q = '<li><p class="tweet">' + r + ' <span class="tweet-meta"><a class="timestamp" href="' + t + '" time="' + this.created_at + '" target="_blank">' + v + '</a> • <a class="reply" href="https://twitter.com/intent/tweet?in_reply_to=' + s + '">Reply</a></span></p></li>';
+                    n.append(q)
+                  })
         }
 
         function e() {
@@ -820,7 +820,7 @@ var sliderArgs = {
     })(window.jQuery);
 
 function linkifyTweet(a) {
-    return a.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi, '<a href="$1">$1</a>').replace(/(^|\s)#(\w+)/g, '$1<a href="http://search.twitter.com/search?q=%23$2">#$2</a>').replace(/(^|\s)@(\w+)/g, '$1<a href="http://twitter.com/$2">@$2</a>')
+    return a.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi, '<a href="$1">$1</a>').replace(/(^|\s)#(\w+)/g, '$1<a href="http://twitter.com/search?q=%23$2">#$2</a>').replace(/(^|\s)@(\w+)/g, '$1<a href="http://twitter.com/$2">@$2</a>')
 }
 
 function relative_time(b) {
