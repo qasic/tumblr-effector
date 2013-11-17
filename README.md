@@ -5,6 +5,13 @@ Fork of Tumblr Effector Theme
 
 Used to customize my photo blog at http://q.qasic.com
 
+beautify url
+============
+
+To format optimized JavaScript code.
+
+http://jsbeautifier.org/
+
 minify url
 ==========
 

@@ -201,7 +201,10 @@ Support: support@pixelunion.net
 
 	<link rel="shortcut icon" href="{Favicon}" />
 	<link rel="apple-touch-icon" href="{PortraitURL-128}" />
-	<link rel="alternate" type="application/rss+xml" href="{RSS}"/>
+	<link rel="alternate" type="application/rss+xml" href="{RSS}" title="RSS Feed for All Posts"/>
+	{block:SearchPage}<link rel="alternate" type="application/rss+xml" href="/search/{SearchQuery}/rss"/ title="RSS Feed for {SearchQuery} Posts">{/block:SearchPage}	
+	{block:TagPage}<link rel="alternate" type="application/rss+xml" href="/tagged/{Tag}/rss"/ title="RSS Feed for {Tag} Posts">{/block:TagPage}
+	
 	<link rel="stylesheet" href="http://static.tumblr.com/hugxd2w/aJVmax7qn/style.min.css" media="screen"/>
 	<link rel="stylesheet" href="http://static.tumblr.com/xgwqnql/MF5lbpkr4/jquery.fancybox-1.3.1.css" media="screen"/>
 
